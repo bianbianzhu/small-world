@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {box,sphere,cylinder,group,book,mat,palette as P} from './primitives.js';
 import {surface} from './materials.js';
 import {createGarden} from './garden.js';
-import {BEDROOM,DOOR,floorHeightAt} from './surfaces.js';
+import {BEDROOM,DOOR,BATH_DOOR,floorHeightAt} from './surfaces.js';
 import {detailToy} from './toyDetails.js';
 
 const rose=0xd6a8a1,linen=0xf2e4d1,peach=0xe9c6af;
@@ -26,8 +26,9 @@ export function createBedroom(scene){
  for(const y of [1.13,2.17,3.18])box(root,2.95,.065,.12,P.white,.09,y,-4.12);
  for(const x of [-1.52,1.71])for(let i=0;i<4;i++)cylinder(root,.055,.055,2.34,surface('fabric',i%2?rose:peach),x-.12+i*.08,2.06,-3.87);
  box(root,6.5,.15,.12,P.white,0,.14,-4.12);
- // The outer wall is low at the front to keep the small objects visible.
- box(root,.16,1.02,8.5,paint,3.25,.51,0);box(root,.17,.075,8.5,linen,3.25,1.05,0);
+ // The outer wall is low at the front to keep the small objects visible; an opening leads through to the bathroom.
+ const gap=[BATH_DOOR.z-BATH_DOOR.halfWidth-.07,BATH_DOOR.z+BATH_DOOR.halfWidth+.07];
+ for(const [z0,z1] of [[-4.25,gap[0]],[gap[1],4.25]]){box(root,.16,1.02,z1-z0,paint,BATH_DOOR.x-BEDROOM.x,.51,(z0+z1)/2);box(root,.17,.075,z1-z0,linen,BATH_DOOR.x-BEDROOM.x,1.05,(z0+z1)/2);}
  // Tiny wallpaper dots are geometry, lit with the rest of the room.
  for(let row=0;row<3;row++)for(let col=0;col<7;col++)sphere(root,.025,0xdcc3b2,-3.0+col*.22,.43+row*.25,-4.147,[1,1,.12]);
  // House-frame low toddler bed, quilted blanket and cloud headboard.

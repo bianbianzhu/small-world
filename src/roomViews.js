@@ -3,7 +3,8 @@ import {viewText,onLangChange} from './i18n.js';
 export const ROOM_VIEWS={
  playroom:{target:[-.3,.6,0],offset:[13.3,11.9,17],number:'01'},
  bedroom:{target:[8.55,.8,0],offset:[9.4,10.0,14.4],number:'02'},
- home:{target:[3.45,.65,0],offset:[17.0,17.0,24.0],number:'01 + 02'}
+ bathroom:{target:[14.25,.8,0],offset:[8.6,9.4,13.2],number:'03'},
+ home:{target:[5.6,.65,0],offset:[19.5,19.0,27.0],number:'01 + 02 + 03'}
 };
 export function createRoomViews(camera,controls){
  let selected='home',transition=null;
@@ -12,7 +13,8 @@ export function createRoomViews(camera,controls){
    transition={from:camera.position.clone(),fromTarget:controls.target.clone(),to:target.clone().add(offset),target,t:animate?0:1};
    document.querySelectorAll('[data-room]').forEach(b=>{b.classList.toggle('active',b.dataset.room===id);b.setAttribute('aria-pressed',String(b.dataset.room===id));});
    applyCopy(id);
-   document.querySelector('#visit-bedroom').hidden=id==='playroom';
+   document.querySelector('#visit-bedroom').hidden=!(id==='bedroom'||id==='home');
+   document.querySelector('#visit-bathroom').hidden=!(id==='bathroom'||id==='home');
  }
  function applyCopy(id){const view=ROOM_VIEWS[id],copy=viewText(id);
    document.querySelector('.intro h1').innerHTML=copy.title;document.querySelector('.intro p').innerHTML=copy.text;document.querySelector('.room-label').innerHTML=`${copy.english} <b>${view.number}</b>`;

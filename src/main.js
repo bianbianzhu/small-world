@@ -6,6 +6,7 @@ import {GTAOPass} from 'three/addons/postprocessing/GTAOPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createBedroom,connectRooms} from './world/bedroom.js';
+import {createBathroom,connectBathroom} from './world/bathroom.js';
 import {createRoomViews} from './roomViews.js';
 import {createRoom} from './world/room.js';
 import {createToys,createDecor} from './world/toys.js';
@@ -18,9 +19,9 @@ const canvas=document.querySelector('#world');
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,alpha:true,powerPreference:'high-performance'});}catch(error){document.querySelector('#loading').innerHTML=`<p>${t('webgl')}</p>`;throw error;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.06;
-const scene=new THREE.Scene();scene.background=new THREE.Color(0xf5f0e6);scene.fog=new THREE.Fog(0xf5f0e6,32,65);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xf5f0e6);scene.fog=new THREE.Fog(0xf5f0e6,38,72);
 const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);const initial=new THREE.Vector3(13,12.5,17);camera.position.copy(initial);
-const controls=new OrbitControls(camera,canvas);controls.target.set(-.3,.6,0);controls.enableDamping=true;controls.dampingFactor=.065;controls.minDistance=6;controls.maxDistance=46;controls.minPolarAngle=.28;controls.maxPolarAngle=Math.PI*.48;controls.enablePan=false;controls.autoRotateSpeed=.45;
+const controls=new OrbitControls(camera,canvas);controls.target.set(-.3,.6,0);controls.enableDamping=true;controls.dampingFactor=.065;controls.minDistance=6;controls.maxDistance=52;controls.minPolarAngle=.28;controls.maxPolarAngle=Math.PI*.48;controls.enablePan=false;controls.autoRotateSpeed=.45;
 // Cool sky fill, warm afternoon key, and restrained reflected light from the floor.
 scene.add(new THREE.HemisphereLight(0xd6ebff,0xcdb58f,1.45));
 const sun=new THREE.DirectionalLight(0xffebcf,2.6);sun.position.set(-3,7,-7);sun.target.position.set(.3,0,.8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8,near:.5,far:25});sun.shadow.bias=-.00012;sun.shadow.normalBias=.018;sun.shadow.radius=3;sun.shadow.blurSamples=8;scene.add(sun,sun.target);
@@ -29,7 +30,7 @@ const renderTarget=new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,sam
 const composer=new EffectComposer(renderer,renderTarget);composer.setPixelRatio(Math.min(devicePixelRatio,1.5));composer.addPass(new RenderPass(scene,camera));
 const contactAO=new GTAOPass(scene,camera,1,1);contactAO.updateGtaoMaterial({radius:.22,thickness:.35,distanceExponent:1.5});contactAO.blendIntensity=.38;composer.addPass(contactAO);composer.addPass(new OutputPass());
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0xf5f0e6,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.4;floor.receiveShadow=true;scene.add(floor);
-createRoom(scene);const bedroom=createBedroom(scene);connectRooms(scene);const toys=[...createToys(scene),...bedroom.toys];createDecor(scene);const yueyue=new Yueyue(scene);let activity={key:null,toy:null};function showActivity(){document.querySelector('#activity-text').textContent=activity.key?activityText(activity.key,activity.toy):t('activityDefault');}
+createRoom(scene);const bedroom=createBedroom(scene);connectRooms(scene);const bathroom=createBathroom(scene);connectBathroom(scene);const toys=[...createToys(scene),...bedroom.toys,...bathroom.toys];createDecor(scene);const yueyue=new Yueyue(scene);let activity={key:null,toy:null};function showActivity(){document.querySelector('#activity-text').textContent=activity.key?activityText(activity.key,activity.toy):t('activityDefault');}
 const director=new Director(yueyue,toys,(key,toy)=>{activity={key,toy};showActivity();});showActivity();showActivity();
 // Bake the ~1,200 static primitives into a few dozen draw calls. Every node that moves as a whole
 // (toy roots, movable props, character joints) keeps its own merged meshes; parts animated one by one stay separate.
@@ -38,8 +39,9 @@ const exclude=[...yueyue.eyes];for(const t of toys)for(const p of [t.parts.movin
 const merged=mergeStatic(scene,{units,exclude});if(import.meta.env.DEV){console.info('[perf] merged static meshes',merged);window.__world={renderer,scene,composer};}}
 const roomViews=createRoomViews(camera,controls);
 document.querySelector('#visit-bedroom').onclick=()=>{roomViews.select('bedroom');invite(bedroom.toys[0]);};
-// One continuous sun direction covers both rooms, with enough shadow texels for the wider home.
-sun.position.x+=4.0;sun.target.position.x+=4.0;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-13;sun.shadow.camera.right=13;sun.shadow.camera.top=10;sun.shadow.camera.bottom=-10;sun.shadow.camera.updateProjectionMatrix();
+document.querySelector('#visit-bathroom').onclick=()=>{roomViews.select('bathroom');invite(bathroom.toys[0]);};
+// One continuous sun direction covers all three rooms, with enough shadow texels for the wider home.
+sun.position.x+=5.6;sun.target.position.x+=5.6;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-16.5;sun.shadow.camera.right=16.5;sun.shadow.camera.top=10;sun.shadow.camera.bottom=-10;sun.shadow.camera.updateProjectionMatrix();
 // Slow, almost imperceptible floating dust in the warm window light.
 const dustPositions=new Float32Array(70*3);for(let i=0;i<70;i++){dustPositions[i*3]=(Math.random()-.5)*9;dustPositions[i*3+1]=Math.random()*3+.3;dustPositions[i*3+2]=(Math.random()-.5)*7}const dustGeo=new THREE.BufferGeometry();dustGeo.setAttribute('position',new THREE.BufferAttribute(dustPositions,3));const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:0xfff6cc,size:.025,transparent:true,opacity:.42,depthWrite:false}));scene.add(dust);
 function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);composer.setSize(w,h);camera.aspect=w/h;camera.setViewOffset(w,h,w>760?-w*.12:0,w>760?0:-h*.06,w,h);camera.updateProjectionMatrix();}window.addEventListener('resize',resize);resize();

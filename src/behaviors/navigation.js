@@ -1,13 +1,17 @@
+import {BATH_DOOR} from '../world/surfaces.js';
 // Clearance accounts for the child's body, castle, slide, and fixed furniture.
 export const obstacles=[{x1:.80,x2:3.78,z1:-3.6,z2:-.72},{x1:2.35,x2:3.37,z1:-.8,z2:.86},
 {x1:5.75,x2:7.6,z1:-4.2,z2:-2.50},
 {x1:8.68,x2:11.33,z1:-3.50,z2:.37},
 {x1:7.75,x2:8.95,z1:-3.42,z2:-2.10},
 {x1:5.70,x2:7.38,z1:-1.50,z2:.80},
-{x1:10.25,x2:11.70,z1:1.98,z2:3.65}];
-export function blocked(x,z){return (x>4.35&&x<5.60&&(z<1.2||z>2.2))||obstacles.some(r=>x>r.x1&&x<r.x2&&z>r.z1&&z<r.z2)}
+{x1:10.25,x2:11.70,z1:1.98,z2:3.65},
+// Bathroom: tub with curtain, vanity and step stool, toilet, potty, open shelf, hamper, plant, towel ladder.
+{x1:11.95,x2:14.25,z1:-4.4,z2:-2.85},{x1:14.55,x2:16.7,z1:-4.4,z2:-2.55},{x1:15.45,x2:16.7,z1:-2.15,z2:-.85},{x1:15.1,x2:15.7,z1:-.9,z2:-.3},
+{x1:15.55,x2:16.7,z1:.55,z2:2.25},{x1:15.75,x2:16.7,z1:3.0,z2:4.0},{x1:11.85,x2:12.7,z1:3.15,z2:4.0},{x1:11.85,x2:12.42,z1:-.95,z2:.15}];
+export function blocked(x,z){return (x>4.35&&x<5.60&&(z<1.2||z>2.2))||(x>BATH_DOOR.x-.2&&x<BATH_DOOR.x+.2&&Math.abs(z-BATH_DOOR.z)>BATH_DOOR.halfWidth-.05)||obstacles.some(r=>x>r.x1&&x<r.x2&&z>r.z1&&z<r.z2)}
 export function route(start,end){
-  const step=.18,minX=-3.7,minZ=-3.5,maxX=11.45,maxZ=3.65;
+  const step=.18,minX=-3.7,minZ=-3.5,maxX=16.4,maxZ=3.65;
   const cell=p=>[Math.round((p.x-minX)/step),Math.round((p.z-minZ)/step)];
   const world=([x,z])=>({x:minX+x*step,z:minZ+z*step});
   const key=p=>p.join(',');const from=cell(start),to=cell(end),open=[from],cost=new Map([[key(from),0]]),parent=new Map();let found=false;

@@ -5,15 +5,15 @@ const STRINGS={
 zh:{
  htmlLang:'zh-CN',
  title:'悦悦的小小世界 · Little moments, big wonders',
- description:'悦悦的小小世界，一个充满阳光、玩具与好奇心的互动 3D 小家，连通游戏房与悦悦的卧室。',
+ description:'悦悦的小小世界，一个充满阳光、玩具与好奇心的互动 3D 小家，连通游戏房、悦悦的卧室与白色小浴室。',
  canvasLabel:'悦悦的三维小家，拖动旋转，滚轮缩放',
  brand:'悦悦的小小世界',brandSub:'YUEYUE’S LITTLE WORLD',
  weather:'一个慢慢长大的下午',weatherSub:'22°C · 阳光正好',
  soundOn:'开启环境音乐',soundOff:'关闭环境音乐',soundTitle:'环境音乐',
  langButton:'EN',langSwitch:'Switch to English',
- roomNav:'房间视角',roomPlayroom:'01 游戏房',roomBedroom:'02 悦悦卧室',roomHome:'整个小家',
+ roomNav:'房间视角',roomPlayroom:'01 游戏房',roomBedroom:'02 悦悦卧室',roomBathroom:'03 洗手间',roomHome:'整个小家',
  eyebrow:'在这里，好奇心自由生长',
- visitBedroom:'陪悦悦去卧室',
+ visitBedroom:'陪悦悦去卧室',visitBathroom:'陪悦悦去洗澡',
  avatar:'悦',childName:'悦悦',childTag:'2 岁 · 小小探索家',
  activityDefault:'正在发现今天的小惊喜…',
  viewNav:'视角控制',zoomIn:'放大',zoomOut:'缩小',rotate:'自动环绕',reset:'回到初始视角',
@@ -29,7 +29,8 @@ zh:{
  views:{
   playroom:{label:'阳光游戏室',english:'THE PLAYROOM',title:'小小世界，<br/>大大的<span>好奇心。</span>',text:'不用赶时间。<br/>陪悦悦，玩一会儿吧。',detail:'60 m²'},
   bedroom:{label:'悦悦的卧室',english:'YUEYUE’S BEDROOM',title:'抱一抱，<br/>做个<span>甜甜的梦。</span>',text:'把今天的小快乐，<br/>轻轻放进梦里。',detail:'绘本 · 云朵床 · 晚安小熊'},
-  home:{label:'悦悦的小家',english:'OUR LITTLE HOME',title:'玩耍与美梦，<br/>只隔<span>一扇小门。</span>',text:'阳光游戏房，柔软小卧室。<br/>每个角落，都有一点喜欢。',detail:'游戏房 ＋ 卧室'}
+  bathroom:{label:'云朵洗手间',english:'THE BATHROOM',title:'泡泡满满，<br/>洗一个<span>香香的澡。</span>',text:'小黄鸭在等你，<br/>水温刚刚好。',detail:'浴缸 · 泡泡 · 小黄鸭'},
+  home:{label:'悦悦的小家',english:'OUR LITTLE HOME',title:'玩耍、美梦和泡泡，<br/>都在<span>一个小家。</span>',text:'阳光游戏房，柔软小卧室，白色小浴室。<br/>每个角落，都有一点喜欢。',detail:'游戏房 ＋ 卧室 ＋ 洗手间'}
  },
  toys:{
   castle:{label:'云朵城堡',status:'爬上小城堡，再滑下来！'},
@@ -39,21 +40,23 @@ zh:{
   ball:{label:'滚滚球球',status:'推一推，小球会滚到哪里呢？'},
   bunny:{label:'兔兔朋友',status:'抱抱兔兔，最喜欢你啦'},
   'bedroom-book':{label:'睡前绘本',status:'在卧室里，读一个温柔的小故事'},
-  'bedroom-bear':{label:'晚安小熊',status:'抱抱小熊，今天也要做个好梦'}
+  'bedroom-bear':{label:'晚安小熊',status:'抱抱小熊，今天也要做个好梦'},
+  'bath-duck':{label:'小黄鸭',status:'抱着小黄鸭，嘎嘎嘎，一起洗澡澡'},
+  'bath-cups':{label:'泡泡叠叠杯',status:'一个一个，把小杯子叠成小高塔'}
  }
 },
 en:{
  htmlLang:'en',
  title:'Yueyue\'s Little World · Little moments, big wonders',
- description:'Yueyue\'s Little World, an interactive 3D home full of sunshine, toys and curiosity, linking the playroom and Yueyue\'s bedroom.',
+ description:'Yueyue\'s Little World, an interactive 3D home full of sunshine, toys and curiosity, linking the playroom, Yueyue\'s bedroom and a little white bathroom.',
  canvasLabel:'Yueyue\'s 3D home. Drag to rotate, scroll to zoom.',
  brand:'Yueyue\'s Little World',brandSub:'悦悦的小小世界',
  weather:'A slow, growing afternoon',weatherSub:'22°C · Perfect sunshine',
  soundOn:'Turn on ambient music',soundOff:'Turn off ambient music',soundTitle:'Ambient music',
  langButton:'中',langSwitch:'切换为中文',
- roomNav:'Room views',roomPlayroom:'01 Playroom',roomBedroom:'02 Bedroom',roomHome:'Whole home',
+ roomNav:'Room views',roomPlayroom:'01 Playroom',roomBedroom:'02 Bedroom',roomBathroom:'03 Bathroom',roomHome:'Whole home',
  eyebrow:'Where curiosity grows freely',
- visitBedroom:'Walk Yueyue to bed',
+ visitBedroom:'Walk Yueyue to bed',visitBathroom:'Bath time with Yueyue',
  avatar:'Y',childName:'Yueyue',childTag:'Age 2 · Little explorer',
  activityDefault:'Discovering today\'s little surprise…',
  viewNav:'View controls',zoomIn:'Zoom in',zoomOut:'Zoom out',rotate:'Auto orbit',reset:'Reset view',
@@ -67,7 +70,8 @@ en:{
  views:{
   playroom:{label:'Sunny Playroom',english:'THE PLAYROOM',title:'A little world,<br/>a great big <span>curiosity.</span>',text:'No need to hurry.<br/>Stay and play with Yueyue a while.',detail:'60 m²'},
   bedroom:{label:'Yueyue\'s Bedroom',english:'YUEYUE\'S BEDROOM',title:'A warm hug,<br/>and a <span>sweet dream.</span>',text:'Tuck today\'s little joys<br/>gently into tonight\'s dreams.',detail:'Picture book · Cloud bed · Goodnight bear'},
-  home:{label:'Yueyue\'s Home',english:'OUR LITTLE HOME',title:'Play and dreams,<br/>just <span>one small door</span> apart.',text:'A sunny playroom, a soft little bedroom.<br/>Something to love in every corner.',detail:'Playroom + Bedroom'}
+  bathroom:{label:'Cloud Bathroom',english:'THE BATHROOM',title:'Bubbles everywhere,<br/>and a <span>warm, sweet bath.</span>',text:'Little duck is waiting,<br/>and the water is just right.',detail:'Bathtub · Bubbles · Rubber duck'},
+  home:{label:'Yueyue\'s Home',english:'OUR LITTLE HOME',title:'Play, dreams and bubbles,<br/>all in <span>one little home.</span>',text:'A sunny playroom, a soft bedroom, a white little bathroom.<br/>Something to love in every corner.',detail:'Playroom + Bedroom + Bathroom'}
  },
  toys:{
   castle:{label:'Cloud Castle',status:'Climbing up the castle, then sliding down!'},
@@ -77,7 +81,9 @@ en:{
   ball:{label:'Rolling Ball',status:'A little push… where will the ball roll?'},
   bunny:{label:'Bunny Friend',status:'Hugging bunny, her very favourite'},
   'bedroom-book':{label:'Bedtime Story',status:'Reading a gentle little story in the bedroom'},
-  'bedroom-bear':{label:'Goodnight Bear',status:'Hugging teddy, sweet dreams tonight'}
+  'bedroom-bear':{label:'Goodnight Bear',status:'Hugging teddy, sweet dreams tonight'},
+  'bath-duck':{label:'Rubber Duck',status:'Hugging the little duck, quack quack, bath time!'},
+  'bath-cups':{label:'Stacking Cups',status:'Stacking the bath cups into a little tower'}
  }
 }
 };
