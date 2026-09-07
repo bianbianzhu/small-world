@@ -7,13 +7,13 @@ const V=(x,y,z)=>new THREE.Vector3(x,y,z);
 export class Director{
   constructor(character,toys,onChange){Object.assign(this,{character,toys,onChange,time:0,elapsed:0,paused:false,current:null,state:'idle',wait:1.4,last:null,queue:null,onBeat:null,speed:0});}
   select(toy){
-    if(this.state==='play'){this.queue=toy;this.onChange(`玩好手里的，就去${toy.label}…`,toy.id);return;}
+    if(this.state==='play'){this.queue=toy;this.onChange('queue',toy);return;}
     this.current=toy;this.last=toy.id;this.state='walk';this.elapsed=0;this.speed=0;this.beat=-1;
     const end=V(toy.approach[0],.23,toy.approach[1]);
     if(toy.behavior==='ball'&&toy.parts.moving)end.x=toy.position[0]+toy.parts.moving.position.x-.43;
     this.path=route(this.character.root.position,end).map(p=>V(p.x,floorHeightAt(p.x,p.z)+.005,p.z));
-    if(!this.path.length){this.state='idle';this.onChange('换一条路，再去找小玩具',null);return;}
-    this.onChange(`正在走向${toy.label}…`,toy.id);
+    if(!this.path.length){this.state='idle';this.onChange('blocked',null);return;}
+    this.onChange('walking',toy);
   }
   restore(){
     const toy=this.current;if(!toy)return;
@@ -37,7 +37,7 @@ export class Director{
       const target=this.path[0],delta=target.clone().sub(p);delta.y=0;const distance=delta.length();
       const angle=Math.atan2(delta.x,delta.z),turn=Math.atan2(Math.sin(angle-c.root.rotation.y),Math.cos(angle-c.root.rotation.y));
       if(distance>.025&&Math.abs(turn)>.45){this.speed=0;this.face(target,dt);c.pose('idle',this.time,dt);return;}
-      if(distance<.025){p.copy(target);this.path.shift();if(!this.path.length){this.state='play';this.elapsed=0;this.start=p.clone();this.propStart=this.current.parts.moving?.position.clone();this.propRotation=this.current.parts.moving?.quaternion.clone();this.ballVelocity=0;this.onChange(this.current.status,this.current.id);}}
+      if(distance<.025){p.copy(target);this.path.shift();if(!this.path.length){this.state='play';this.elapsed=0;this.start=p.clone();this.propStart=this.current.parts.moving?.position.clone();this.propRotation=this.current.parts.moving?.quaternion.clone();this.ballVelocity=0;this.onChange('playing',this.current);}}
       else{const maxSpeed=Math.min(.65,Math.sqrt(2*.8*distance)+(this.path.length>1?.25:0));this.speed=THREE.MathUtils.damp(this.speed,maxSpeed,5,dt);p.addScaledVector(delta.normalize(),Math.min(distance,dt*this.speed));this.face(target,dt);}
       p.y=floorHeightAt(p.x,p.z)+.005;
       c.pose('walk',this.time,dt);return;
@@ -82,7 +82,7 @@ export class Director{
       const target=this.world(toy,parts.moving.position.clone().add(V(-.27,.06,0)));this.face(this.world(toy,parts.moving.position),dt);this.reach(1,target,contact*(1-release));
     }
     if(b==='climb')this.climb(toy,t,dt);
-    if(t>toy.duration){this.restore();this.state='idle';this.elapsed=0;this.wait=.9;this.onChange('看看，还有什么好玩的呢？',null);}
+    if(t>toy.duration){this.restore();this.state='idle';this.elapsed=0;this.wait=.9;this.onChange('idle',null);}
   }
   climb(toy,t,dt){
     const c=this.character,p=c.root.position;
